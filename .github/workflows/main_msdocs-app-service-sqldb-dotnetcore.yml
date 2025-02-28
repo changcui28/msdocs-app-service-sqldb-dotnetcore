@@ -3,21 +3,19 @@
 
 name: Build and deploy ASP.Net Core app to Azure Web App - msdocs-app-service-sqldb-dotnetcore
 
-on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+on: [push]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      # Checkout the repo
+      - uses: actions/checkout@main
 
+      # Setup .NET Core SDK
       - name: Set up .NET Core
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.x'
           include-prerelease: true
@@ -49,9 +47,9 @@ jobs:
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v3
         with:
           app-name: 'msdocs-app-service-sqldb-dotnetcore'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E479B9B240E14AAE9624EC2C4BAF0FFA }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }} 
           package: .
